@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+ 
+  <properties>
+    <title>Protocol Buffers Basics: SNMP</title>
+    <author>Toshikazu Ando.</author>
+  </properties>
+ 
+  <body>
+    <section name="Protocol Buffers Basics: SNMP">
+      <subsection name="NAME">
+        <p>SNMP(ASN.1) to gRPC(Protocol Buffers) for JavaCC</p>
+      </subsection>
+      <subsection name="DOWNLOAD">
+        <ul>
+         <li><a href="snmpToGrpc.zip">snmpToGrpc.zip</a></li>
+         <li><a href="https://github.com/Tand0/javaccSnmpToGrpc">Source code</a></li>
+        </ul>
+      </subsection>
+      <subsection name="Why Use Protocol Buffers?">
+        <p>Because a JavaCC is there!</p>
+        <ul>
+         <li><a href="https://developers.google.com/protocol-buffers/">What are protocol buffers?</a></li>
+         <li><a href="https://javacc.java.net/">Java Compiler Compiler (JavaCC) - The Java Parser Generator</a></li>
+        </ul>
+      </subsection>
+    </section>
+    <section name="Getting started">
+      <subsection name="Examples">
+        <p>For example, to try example first run:</p>
+        <source>&gt; cd .\src\main\config
+&gt; .\run.bat</source>
+        <p>or:</p>
+         <source>$ cd ./src/main/config
+$ java -jar snmpToGrpc.jar</source>
+        <p>That's it!</p>
+      </subsection>
+      <subsection name="Notification">
+        <p>From ASN.1 Type</p>
+        <source>
+linkDown NOTIFICATION-TYPE
+    OBJECTS { ifIndex, ifAdminStatus, ifOperStatus }
+    STATUS  current
+    DESCRIPTION
+            "A linkDown trap signifies that the SNMP entity, acting in
+            an agent role, has detected that the ifOperStatus object for
+            one of its communication links is about to enter the down
+            state from some other state (but not from the notPresent
+            state).  This other state is indicated by the included value
+            of ifOperStatus."
+    ::= { snmpTraps 3 }</source>
+        <p>To Protocol Buffers Type</p>
+        <source>
+rpc TrplinkDown (LInkDownKey) returns (NoKey) {}
+ ...
+// nodeName=linkDown
+message LInkDownKey {
+  int32 ifIndex = 1; // Integer32
+  int32 ifAdminStatus = 2; // INTEGER
+  int32 ifOperStatus = 3; // INTEGER
+}</source>
+      </subsection>
+      <subsection name="Table">
+        <p>From ASN.1 Type</p>
+        <source>
+ifEntry OBJECT-TYPE
+    SYNTAX      IfEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+            "An entry containing management information applicable to a
+            particular interface."
+    INDEX   { ifIndex }
+    ::= { ifTable 1 }
+
+IfEntry ::=
+    SEQUENCE {
+        ifIndex                 InterfaceIndex,
+        ifDescr                 DisplayString,
+        ifType                  IANAifType,
+        ifMtu                   Integer32,
+        ifSpeed                 Gauge32,
+        ifPhysAddress           PhysAddress,
+        ifAdminStatus           INTEGER,
+        ifOperStatus            INTEGER,
+        ifLastChange            TimeTicks,
+        ifInOctets              Counter32,
+        ifInUcastPkts           Counter32,
+        ifInNUcastPkts          Counter32,  -- deprecated
+        ifInDiscards            Counter32,
+        ifInErrors              Counter32,
+        ifInUnknownProtos       Counter32,
+        ifOutOctets             Counter32,
+        ifOutUcastPkts          Counter32,
+        ifOutNUcastPkts         Counter32,  -- deprecated
+        ifOutDiscards           Counter32,
+        ifOutErrors             Counter32,
+        ifOutQLen               Gauge32,    -- deprecated
+        ifSpecific              OBJECT IDENTIFIER -- deprecated
+    }</source>
+        <p>To Protocol Buffers Type</p>
+        <source>
+  rpc SetIFEntry (IFEntryKeyIndex) returns (NoKey) {}
+  rpc GetIFEntry (IFEntryIndex) returns (IFEntryKey) {}
+  rpc SayIFEntry (NoKey) returns (stream IFEntryIndex) {}
+  ...
+message IFEntryKeyIndex {
+  IFEntryKey key = 1; 
+  IFEntryIndex value = 2; 
+}
+message IFEntryIndex {
+  int32 ifIndex = 1; // Integer32
+}
+message IFEntryKey {
+  int32 ifType = 1; // IANAifType
+  int32 ifMtu = 2; // Integer32
+  bytes ifPhysAddress = 3; // OCTET STRING
+  uint32 ifInDiscards = 4; // Counter32
+  uint32 ifOutUcastPkts = 5; // Counter32
+  uint32 ifSpeed = 6; // Gauge32
+  uint32 ifInNUcastPkts = 7; // Counter32
+  uint32 ifInErrors = 8; // Counter32
+  string ifDescr = 9; // DisplayString
+  bytes ifLastChange = 10; // TimeTicks
+  uint32 ifOutDiscards = 11; // Counter32
+  uint32 ifOutQLen = 12; // Gauge32
+  uint32 ifInUnknownProtos = 13; // Counter32
+  uint32 ifInUcastPkts = 14; // Counter32
+  uint32 ifOutOctets = 15; // Counter32
+  uint32 ifInOctets = 16; // Counter32
+  uint32 ifOutErrors = 17; // Counter32
+  uint32 ifOutNUcastPkts = 18; // Counter32
+}</source>
+      </subsection>
+      <subsection name="Value">
+        <p>From ASN.1 Type</p>
+        <source>
+ifTestId         OBJECT-TYPE
+    SYNTAX       TestAndIncr
+    MAX-ACCESS   read-write
+    STATUS       deprecated
+    DESCRIPTION
+            "This object identifies the current invocation of the
+            interface's test."
+    ::= { ifTestEntry 1 }</source>
+        <p>To Protocol Buffers Type</p>
+        <source>
+  rpc SetIFTestId (IFTestIdKey) returns (NoKey) {}
+  rpc GetIFTestId (NoKey) returns (IFTestIdKey) {}
+  ...
+message IFTestIdKey {
+  int32 ifTestId = 1; // INTEGER
+}</source>
+      </subsection>
+
+      <subsection name="Crient Implementation">
+        <p>To Protocol Buffers(Java) Type</p>
+        <source>
+        LinkDownKey key = LinkDownKey
+                .newBuilder()
+                .setIfIndex(1)
+                .setIfAdminStatus(2)
+                .setIfOperStatus(3)
+                .build();</source>
+        <p>To SNMP4j Type</p>
+        <source>
+        LinkDownKey key = LinkDownKeySnmpBuilder
+                .newBuilder()
+                .setIfIndex(new org.snmp4j.smi.Integer32(1))
+                .setIfAdminStatus(new org.snmp4j.smi.Integer32(2))
+                .setIfOperStatus(new org.snmp4j.smi.Integer32(3))
+                .build();</source>
+      </subsection>
+
+      <subsection name="Server Implementation">
+        <p>To Protocol Buffers(Java) Type</p>
+        <source>
+        LinkDownKey key = ...
+        //
+        int ifIndex = key.getIfIndex();
+        int ifAdmin = key.getIfAdminStatus();
+        int ifOper  = key.getIfOperStatus();</source>
+        <p>To SNMP4j Type</p>
+        <source>
+        LinkDownKey work = ...
+        LinkDownKeySnmpWrapper key = new LinkDownKeySnmpWrapper(work);
+        //
+        org.snmp4j.smi.Integer32 ifIndex = key.getIfIndex();
+        org.snmp4j.smi.Integer32 ifAdmin = key.getIfAdminStatus();
+        org.snmp4j.smi.Integer32 ifOper  = key.getIfOperStatus();</source>
+      </subsection>
+      <subsection name="Scalar Value Types">
+        <p>@see "jp.ne.ruru.park.ando.jstg.MessageCreator"</p>
+        <table>
+<tr><th>ASN.1 Type</th><th>SNMP4j Type</th><th>Java Type</th><th>Protocol Buffers Type</th></tr>
+<tr><td>DisplayString</td><td>java.lang.String</td><td>java.lang.String</td><td>string</td></tr>
+<tr><td>AutonomousType</td><td>org.snmp4j.smi.OctetString</td><td>byte []</td><td>bytes</td></tr>
+<tr><td>OBJECT IDENTIFIER</td><td>org.snmp4j.smi.OID</td><td>int []</td><td>repeated uint32</td></tr>
+<tr><td>OCTET STRING</td><td>org.snmp4j.smi.OctetString</td><td>byte []</td><td>bytes</td></tr>
+<tr><td>Opaque</td><td>org.snmp4j.smi.OctetString</td><td>byte []</td><td>bytes</td></tr>
+<tr><td>INTEGER</td><td>org.snmp4j.smi.Integer32</td><td>int</td><td>int32</td></tr>
+<tr><td>IANAifType</td><td>org.snmp4j.smi.Integer32</td><td>int</td><td>int32</td></tr>
+<tr><td>IANAtunnelType</td><td>org.snmp4j.smi.Integer64</td><td>long</td><td>int64</td></tr>
+<tr><td>Integer</td><td>org.snmp4j.smi.Integer32</td><td>int</td><td>int32</td></tr>
+<tr><td>Integer32</td><td>org.snmp4j.smi.Integer32</td><td>int</td><td>int32</td></tr>
+<tr><td>Integer64</td><td>org.snmp4j.smi.Counter64</td><td>long</td><td>int64</td></tr>
+<tr><td>Unsigned</td><td>org.snmp4j.smi.UnsignedInteger32</td><td>long</td><td>uint64</td></tr>
+<tr><td>Unsigned32</td><td>org.snmp4j.smi.UnsignedInteger32</td><td>long</td><td>uint64</td></tr>
+<tr><td>Unsigned64</td><td>org.snmp4j.smi.Counter64</td><td>long</td><td>uint64</td></tr>
+<tr><td>Counter</td><td>org.snmp4j.smi.Counter32</td><td>long</td><td>uint64</td></tr>
+<tr><td>Counter32</td><td>org.snmp4j.smi.Counter32</td><td>long</td><td>uint64</td></tr>
+<tr><td>Counter64</td><td>org.snmp4j.smi.Counter64</td><td>long</td><td>uint64</td></tr>
+<tr><td>Gauge</td><td>org.snmp4j.smi.Gauge32</td><td>long</td><td>uint64</td></tr>
+<tr><td>Gauge32</td><td>org.snmp4j.smi.Gauge32</td><td>long</td><td>uint64</td></tr>
+<tr><td>Gauge64</td><td>org.snmp4j.smi.Counter64</td><td>long</td><td>uint64</td></tr>
+<tr><td>TimeTicks</td><td>org.snmp4j.smi.TimeTicks</td><td>long</td><td>uint64</td></tr>
+<tr><td>InetAddressIPv6</td><td>org.snmp4j.smi.OctetString</td><td>byte []</td><td>bytes</td></tr>
+<tr><td>IpAddress</td><td>org.snmp4j.smi.OctetString</td><td>byte []</td><td>bytes</td></tr>
+<tr><td>InetAddress</td><td>org.snmp4j.smi.OctetString</td><td>byte []</td><td>bytes</td></tr>
+<tr><td>BITS</td><td>org.snmp4j.smi.OctetString</td><td>byte []</td><td>bytes</td></tr>
+<tr><td>PhysAddress</td><td>org.snmp4j.smi.OctetString</td><td>byte []</td><td>bytes</td></tr>
+<tr><td>MacAddress</td><td>org.snmp4j.smi.OctetString</td><td>byte []</td><td>bytes</td></tr>
+<tr><td>TruthValue</td><td>org.snmp4j.smi.OctetString</td><td>byte []</td><td>bytes</td></tr>
+<tr><td>TestAndIncr</td><td>org.snmp4j.smi.OctetString</td><td>byte []</td><td>bytes</td></tr>
+<tr><td>AutonomousType</td><td>org.snmp4j.smi.OctetString</td><td>byte []</td><td>bytes</td></tr>
+<tr><td>InstancePointer</td><td>org.snmp4j.smi.OctetString</td><td>byte []</td><td>bytes</td></tr>
+<tr><td>CHOICE</td><td>org.snmp4j.smi.OctetString</td><td>byte []</td><td>bytes</td></tr>
+        </table>
+      </subsection>
+   </section>
+  </body>
+</document>

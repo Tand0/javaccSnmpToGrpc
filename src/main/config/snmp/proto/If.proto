@@ -1,0 +1,517 @@
+//
+// snmp to grpc (*.protoc)
+//
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "jp.ne.ruru.park.ando.jstg.proto.ifmib";
+option java_outer_classname = "If";
+option objc_class_prefix = "HLW";
+
+package ifmib;
+
+// The greeting service definition.
+service IfService {
+  rpc getIfNumber (NoKey) returns (IfNumberKey) {}
+  rpc getIfTableLastChange (NoKey) returns (IfTableLastChangeKey) {}
+  rpc setIfEntry (IfEntryKeyIndex) returns (NoKey) {}
+  rpc getIfEntry (IfEntryIndex) returns (IfEntryKey) {}
+  rpc sayIfEntry (NoKey) returns (stream IfEntryIndex) {}
+  rpc getIfName (NoKey) returns (IfNameKey) {}
+  rpc getIfInMulticastPkts (NoKey) returns (IfInMulticastPktsKey) {}
+  rpc getIfInBroadcastPkts (NoKey) returns (IfInBroadcastPktsKey) {}
+  rpc getIfOutMulticastPkts (NoKey) returns (IfOutMulticastPktsKey) {}
+  rpc getIfOutBroadcastPkts (NoKey) returns (IfOutBroadcastPktsKey) {}
+  rpc getIfHCInOctets (NoKey) returns (IfHCInOctetsKey) {}
+  rpc getIfHCInUcastPkts (NoKey) returns (IfHCInUcastPktsKey) {}
+  rpc getIfHCInMulticastPkts (NoKey) returns (IfHCInMulticastPktsKey) {}
+  rpc getIfHCInBroadcastPkts (NoKey) returns (IfHCInBroadcastPktsKey) {}
+  rpc getIfHCOutOctets (NoKey) returns (IfHCOutOctetsKey) {}
+  rpc getIfHCOutUcastPkts (NoKey) returns (IfHCOutUcastPktsKey) {}
+  rpc getIfHCOutMulticastPkts (NoKey) returns (IfHCOutMulticastPktsKey) {}
+  rpc getIfHCOutBroadcastPkts (NoKey) returns (IfHCOutBroadcastPktsKey) {}
+  rpc setIfLinkUpDownTrapEnable (IfLinkUpDownTrapEnableKey) returns (NoKey) {}
+  rpc getIfLinkUpDownTrapEnable (NoKey) returns (IfLinkUpDownTrapEnableKey) {}
+  rpc getIfHighSpeed (NoKey) returns (IfHighSpeedKey) {}
+  rpc setIfPromiscuousMode (IfPromiscuousModeKey) returns (NoKey) {}
+  rpc getIfPromiscuousMode (NoKey) returns (IfPromiscuousModeKey) {}
+  rpc getIfConnectorPresent (NoKey) returns (IfConnectorPresentKey) {}
+  rpc setIfAlias (IfAliasKey) returns (NoKey) {}
+  rpc getIfAlias (NoKey) returns (IfAliasKey) {}
+  rpc getIfCounterDiscontinuityTime (NoKey) returns (IfCounterDiscontinuityTimeKey) {}
+  rpc setIfStackEntry (IfStackEntryKeyIndex) returns (NoKey) {}
+  rpc getIfStackEntry (IfStackEntryIndex) returns (IfStackEntryKey) {}
+  rpc sayIfStackEntry (NoKey) returns (stream IfStackEntryIndex) {}
+  rpc getIfStackLastChange (NoKey) returns (IfStackLastChangeKey) {}
+  rpc setIfRcvAddressEntry (IfRcvAddressEntryKeyIndex) returns (NoKey) {}
+  rpc getIfRcvAddressEntry (IfRcvAddressEntryIndex) returns (IfRcvAddressEntryKey) {}
+  rpc sayIfRcvAddressEntry (NoKey) returns (stream IfRcvAddressEntryIndex) {}
+  rpc trplinkDown (LinkDownKey) returns (NoKey) {}
+  rpc trplinkUp (LinkUpKey) returns (NoKey) {}
+  rpc setIfTestId (IfTestIdKey) returns (NoKey) {}
+  rpc getIfTestId (NoKey) returns (IfTestIdKey) {}
+  rpc setIfTestStatus (IfTestStatusKey) returns (NoKey) {}
+  rpc getIfTestStatus (NoKey) returns (IfTestStatusKey) {}
+  rpc setIfTestType (IfTestTypeKey) returns (NoKey) {}
+  rpc getIfTestType (NoKey) returns (IfTestTypeKey) {}
+  rpc getIfTestResult (NoKey) returns (IfTestResultKey) {}
+  rpc getIfTestCode (NoKey) returns (IfTestCodeKey) {}
+  rpc setIfTestOwner (IfTestOwnerKey) returns (NoKey) {}
+  rpc getIfTestOwner (NoKey) returns (IfTestOwnerKey) {}
+}
+
+
+// nodeName=ifMIB
+// nodeType=ModuleIdentityMacroType
+
+// nodeName=ifMIBObjects
+// nodeType=Type
+
+// nodeName=interfaces
+// nodeType=Type
+
+// nodeName=ifNumber
+// access  =read-only
+message IfNumberKey {
+  int32 ifNumber = 1; // Integer32
+}
+
+// nodeName=ifTableLastChange
+// access  =read-only
+message IfTableLastChangeKey {
+  uint64 ifTableLastChange = 1; // TimeTicks
+}
+
+// nodeName=ifTable
+// access  =not-accessible
+
+// nodeName=ifEntry
+// access  =not-accessible
+// this is table
+message IfEntryKeyIndex {
+  IfEntryKey key = 1; 
+  IfEntryIndex value = 2; 
+}
+message IfEntryIndex {
+  int32 ifIndex = 1; // INTEGER
+}
+message IfEntryKey {
+  int32 ifIndex = 1; // INTEGER
+  int32 ifType = 2; // IANAifType
+  int32 ifMtu = 3; // Integer32
+  bytes ifPhysAddress = 4; // OCTET STRING
+  uint64 ifInDiscards = 5; // Counter32
+  uint64 ifOutUcastPkts = 6; // Counter32
+  uint64 ifSpeed = 7; // Gauge32
+  uint64 ifInNUcastPkts = 8; // Counter32
+  uint64 ifInErrors = 9; // Counter32
+  string ifDescr = 10; // DisplayString
+  uint64 ifLastChange = 11; // TimeTicks
+  uint64 ifOutDiscards = 12; // Counter32
+  uint64 ifOutQLen = 13; // Gauge32
+  uint64 ifInUnknownProtos = 14; // Counter32
+  uint64 ifInUcastPkts = 15; // Counter32
+  uint64 ifOutOctets = 16; // Counter32
+  uint64 ifInOctets = 17; // Counter32
+  uint64 ifOutErrors = 18; // Counter32
+  uint64 ifOutNUcastPkts = 19; // Counter32
+}
+
+// nodeName=ifIndex
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifDescr
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifType
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifMtu
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifSpeed
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifPhysAddress
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifAdminStatus
+// access  =read-write
+// this is table parameter
+
+// nodeName=ifOperStatus
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifLastChange
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifInOctets
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifInUcastPkts
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifInNUcastPkts
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifInDiscards
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifInErrors
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifInUnknownProtos
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifOutOctets
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifOutUcastPkts
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifOutNUcastPkts
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifOutDiscards
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifOutErrors
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifOutQLen
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifSpecific
+// access  =read-only
+// this is table parameter
+
+// nodeName=ifXTable
+// access  =not-accessible
+
+// nodeName=ifXEntry
+// access  =not-accessible
+
+// nodeName=ifName
+// access  =read-only
+message IfNameKey {
+  string ifName = 1; // DisplayString
+}
+
+// nodeName=ifInMulticastPkts
+// access  =read-only
+message IfInMulticastPktsKey {
+  uint64 ifInMulticastPkts = 1; // Counter32
+}
+
+// nodeName=ifInBroadcastPkts
+// access  =read-only
+message IfInBroadcastPktsKey {
+  uint64 ifInBroadcastPkts = 1; // Counter32
+}
+
+// nodeName=ifOutMulticastPkts
+// access  =read-only
+message IfOutMulticastPktsKey {
+  uint64 ifOutMulticastPkts = 1; // Counter32
+}
+
+// nodeName=ifOutBroadcastPkts
+// access  =read-only
+message IfOutBroadcastPktsKey {
+  uint64 ifOutBroadcastPkts = 1; // Counter32
+}
+
+// nodeName=ifHCInOctets
+// access  =read-only
+message IfHCInOctetsKey {
+  uint64 ifHCInOctets = 1; // Counter64
+}
+
+// nodeName=ifHCInUcastPkts
+// access  =read-only
+message IfHCInUcastPktsKey {
+  uint64 ifHCInUcastPkts = 1; // Counter64
+}
+
+// nodeName=ifHCInMulticastPkts
+// access  =read-only
+message IfHCInMulticastPktsKey {
+  uint64 ifHCInMulticastPkts = 1; // Counter64
+}
+
+// nodeName=ifHCInBroadcastPkts
+// access  =read-only
+message IfHCInBroadcastPktsKey {
+  uint64 ifHCInBroadcastPkts = 1; // Counter64
+}
+
+// nodeName=ifHCOutOctets
+// access  =read-only
+message IfHCOutOctetsKey {
+  uint64 ifHCOutOctets = 1; // Counter64
+}
+
+// nodeName=ifHCOutUcastPkts
+// access  =read-only
+message IfHCOutUcastPktsKey {
+  uint64 ifHCOutUcastPkts = 1; // Counter64
+}
+
+// nodeName=ifHCOutMulticastPkts
+// access  =read-only
+message IfHCOutMulticastPktsKey {
+  uint64 ifHCOutMulticastPkts = 1; // Counter64
+}
+
+// nodeName=ifHCOutBroadcastPkts
+// access  =read-only
+message IfHCOutBroadcastPktsKey {
+  uint64 ifHCOutBroadcastPkts = 1; // Counter64
+}
+
+// nodeName=ifLinkUpDownTrapEnable
+// access  =read-write
+message IfLinkUpDownTrapEnableKey {
+  int32 ifLinkUpDownTrapEnable = 1; // INTEGER
+}
+
+// nodeName=ifHighSpeed
+// access  =read-only
+message IfHighSpeedKey {
+  uint64 ifHighSpeed = 1; // Gauge32
+}
+
+// nodeName=ifPromiscuousMode
+// access  =read-write
+message IfPromiscuousModeKey {
+  int32 ifPromiscuousMode = 1; // INTEGER
+}
+
+// nodeName=ifConnectorPresent
+// access  =read-only
+message IfConnectorPresentKey {
+  int32 ifConnectorPresent = 1; // INTEGER
+}
+
+// nodeName=ifAlias
+// access  =read-write
+message IfAliasKey {
+  string ifAlias = 1; // DisplayString
+}
+
+// nodeName=ifCounterDiscontinuityTime
+// access  =read-only
+message IfCounterDiscontinuityTimeKey {
+  uint64 ifCounterDiscontinuityTime = 1; // TimeTicks
+}
+
+// nodeName=ifStackTable
+// access  =not-accessible
+
+// nodeName=ifStackEntry
+// access  =not-accessible
+// this is table
+message IfStackEntryKeyIndex {
+  IfStackEntryKey key = 1; 
+  IfStackEntryIndex value = 2; 
+}
+message IfStackEntryIndex {
+  int32 ifStackLowerLayer = 1; // Integer32
+  int32 ifStackHigherLayer = 2; // Integer32
+}
+message IfStackEntryKey {
+  int32 ifStackLowerLayer = 1; // Integer32
+  int32 ifStackHigherLayer = 2; // Integer32
+  int32 ifStackStatus = 3; // INTEGER
+}
+
+// nodeName=ifStackHigherLayer
+// access  =not-accessible
+// this is table parameter
+
+// nodeName=ifStackLowerLayer
+// access  =not-accessible
+// this is table parameter
+
+// nodeName=ifStackStatus
+// access  =read-create
+// this is table parameter
+
+// nodeName=ifStackLastChange
+// access  =read-only
+message IfStackLastChangeKey {
+  uint64 ifStackLastChange = 1; // TimeTicks
+}
+
+// nodeName=ifRcvAddressTable
+// access  =not-accessible
+
+// nodeName=ifRcvAddressEntry
+// access  =not-accessible
+// this is table
+message IfRcvAddressEntryKeyIndex {
+  IfRcvAddressEntryKey key = 1; 
+  IfRcvAddressEntryIndex value = 2; 
+}
+message IfRcvAddressEntryIndex {
+  int32 ifIndex = 1; // INTEGER
+  bytes ifRcvAddressAddress = 2; // OCTET STRING
+}
+message IfRcvAddressEntryKey {
+  int32 ifRcvAddressStatus = 1; // INTEGER
+  bytes ifRcvAddressAddress = 2; // OCTET STRING
+}
+
+// nodeName=ifRcvAddressAddress
+// access  =not-accessible
+// this is table parameter
+
+// nodeName=ifRcvAddressStatus
+// access  =read-create
+// this is table parameter
+
+// nodeName=ifRcvAddressType
+// access  =read-create
+// this is table parameter
+
+// nodeName=linkDown
+message LinkDownKey {
+  int32 ifIndex = 1; // INTEGER
+  int32 ifAdminStatus = 2; // INTEGER
+  int32 ifOperStatus = 3; // INTEGER
+}
+
+// nodeName=linkUp
+message LinkUpKey {
+  int32 ifIndex = 1; // INTEGER
+  int32 ifAdminStatus = 2; // INTEGER
+  int32 ifOperStatus = 3; // INTEGER
+}
+
+// nodeName=ifConformance
+// nodeType=Type
+
+// nodeName=ifGroups
+// nodeType=Type
+
+// nodeName=ifCompliances
+// nodeType=Type
+
+// nodeName=ifCompliance3
+// nodeType=ModuleComplianceMacroType
+
+// nodeName=ifGeneralInformationGroup
+// nodeType=ObjecGroupMacroType
+
+// nodeName=ifFixedLengthGroup
+// nodeType=ObjecGroupMacroType
+
+// nodeName=ifHCFixedLengthGroup
+// nodeType=ObjecGroupMacroType
+
+// nodeName=ifPacketGroup
+// nodeType=ObjecGroupMacroType
+
+// nodeName=ifHCPacketGroup
+// nodeType=ObjecGroupMacroType
+
+// nodeName=ifVHCPacketGroup
+// nodeType=ObjecGroupMacroType
+
+// nodeName=ifRcvAddressGroup
+// nodeType=ObjecGroupMacroType
+
+// nodeName=ifStackGroup2
+// nodeType=ObjecGroupMacroType
+
+// nodeName=ifCounterDiscontinuityGroup
+// nodeType=ObjecGroupMacroType
+
+// nodeName=linkUpDownNotificationsGroup
+// nodeType=NotificationGroupMacroType
+
+// nodeName=ifTestTable
+// access  =not-accessible
+
+// nodeName=ifTestEntry
+// access  =not-accessible
+
+// nodeName=ifTestId
+// access  =read-write
+message IfTestIdKey {
+  int32 ifTestId = 1; // INTEGER
+}
+
+// nodeName=ifTestStatus
+// access  =read-write
+message IfTestStatusKey {
+  int32 ifTestStatus = 1; // INTEGER
+}
+
+// nodeName=ifTestType
+// access  =read-write
+message IfTestTypeKey {
+  bytes ifTestType = 1; // AutonomousType
+}
+
+// nodeName=ifTestResult
+// access  =read-only
+message IfTestResultKey {
+  int32 ifTestResult = 1; // INTEGER
+}
+
+// nodeName=ifTestCode
+// access  =read-only
+message IfTestCodeKey {
+  repeated uint32 ifTestCode = 1; // OBJECT IDENTIFIER
+}
+
+// nodeName=ifTestOwner
+// access  =read-write
+message IfTestOwnerKey {
+  bytes ifTestOwner = 1; // OCTET STRING
+}
+
+// nodeName=ifGeneralGroup
+// nodeType=ObjecGroupMacroType
+
+// nodeName=ifTestGroup
+// nodeType=ObjecGroupMacroType
+
+// nodeName=ifStackGroup
+// nodeType=ObjecGroupMacroType
+
+// nodeName=ifOldObjectsGroup
+// nodeType=ObjecGroupMacroType
+
+// nodeName=ifCompliance
+// nodeType=ModuleComplianceMacroType
+
+// nodeName=ifCompliance2
+// nodeType=ModuleComplianceMacroType
+
+message NoKey {
+}
+
+
+

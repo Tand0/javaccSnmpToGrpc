@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="${project.name}">
+  <bannerLeft>
+    <name>${project.name}</name>
+    <src>./images/bannerImage.gif</src>
+    <href>http://park.ruru.ne.jp/ando/work/</href>
+  </bannerLeft>
+  <body>
+    <links>
+      <item name="${project.name}"
+            href="${project.url}"/>
+      <item name="JavaCC"
+            href="https://javacc.java.net/" />
+      <item name="SNMP4J "
+            href="http://www.snmp4j.org/" />
+      <item name="protocol buffers"
+            href="https://developers.google.com/protocol-buffers/" />
+    </links>
+    <menu name="Download">
+      <item name="snmpToGrpc.zip"
+            href="snmpToGrpc.zip" />
+    </menu>
+    <menu name="Related">
+      <item name="ASN.1 grammar for JavaCC"
+            href="../javaccsnmp/index.html" />
+      <item name="Protocol Buffers Basics: SNMP"
+            href="../snmpToGrpc/index.html" />
+      <item name="Protocol Buffers grammar for JavaCC"
+            href="../javaccproto/index.html" />
+    </menu>
+    <menu name="Related2">
+      <item name="en"
+            href="./index.html" />
+      <item name="jp"
+            href="./index_ja.html" />
+    </menu>
+    <menu ref="reports"/>
+  </body>
+</project>
